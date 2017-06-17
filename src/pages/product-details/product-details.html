@@ -1,0 +1,89 @@
+<ion-header>
+
+  <ion-navbar color="danger">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Product Details</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="cartPopover($event)">
+        <ion-icon name="md-cart"></ion-icon>
+       <!-- <ion-badge item-end color="myGray">{{ this.data.nbItems }}</ion-badge> -->
+      </button>
+      <button ion-button icon-only (click)="showAllCategories()">
+        <ion-icon name="md-pricetag"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding class="container">
+  <ion-card>
+    <!--  <ion-card-header no-padding class="prod-header">
+      <ion-slides pager loop autoplay="4000">
+
+       <ion-slide *ngFor="let img of product.images">
+          <img width="200" (load)="loaded = true" [ngClass]="{'img-loaded':loaded}" [hidden]="!loaded" style="margin: 30px auto;margin-top: 0px;" src="http://localhost:8000/api/v1/products/image/{{ img.image }}" alt="image" />
+          <ion-spinner *ngIf="!loaded" [ngClass]="{'center':true}"></ion-spinner>
+        </ion-slide>
+       </ion-slides>
+    </ion-card-header>
+-->
+    <ion-card-header no-padding class="prod-header">
+      <img width="200" (load)="loaded = true" [ngClass]="{'img-loaded':loaded}" [hidden]="!loaded" style="margin: 30px auto;margin-top: 0px;" src="http://localhost:8080/images/chocolate.jpg" alt="image" />
+    </ion-card-header>
+  
+    <ion-card-content padding-vertical>
+      <ion-row>
+        <ion-col align="left" col-6 no-padding>
+          <p align="left">{{ product.productName }}</p>
+        </ion-col>
+        <ion-col col-3 no-padding>
+         <p class="price">Rs {{ product.productRate }}</p>
+        </ion-col>
+        <!--<ion-col col-3 no-padding>
+          <p class="old-price">{{ product.productRate }} DH</p>
+        </ion-col>
+        -->
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+   <div class="quantity" style="padding-bottom: 30px; padding-left: 10px">
+    <input type="number" min="1" step="1" value="1" [(ngModel)]="qty">
+    <div class="quantity-nav">
+      <div class="quantity-button quantity-up" (click)="upQty()">+</div>
+      <div class="quantity-button quantity-down" (click)="downQty()">-</div>
+    </div>
+  </div>
+
+ <!-- <p padding class="inStock" *ngIf="product.nbInStock">In Stock</p>
+  <p padding class="outOfStock" *ngIf="!product.nbInStock">Out Of Stock</p>
+ -->
+
+  <p padding>
+    {{ product.productType }}
+  </p>
+
+  <!-- <ion-list>
+    <ion-item *ngFor="let character of characteristics">
+      {{ character }}
+    </ion-item>
+  </ion-list>
+  --> 
+</ion-content>
+<ion-footer height="100">
+  <ion-grid no-padding>
+    <ion-row>
+      <ion-col col-6  no-padding><!-- -->
+        <button ion-button full color="danger" (click)="addToCart(product.productId, qty)">Add to cart</button>
+      </ion-col>
+      <ion-col col-6 no-padding (click)="goToCheckout()">
+        <button ion-button full color="danger">Buy now</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+</ion-footer>
