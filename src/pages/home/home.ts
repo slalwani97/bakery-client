@@ -1,21 +1,19 @@
 import { Component } from '@angular/core';
-import { PopoverController, NavController, LoadingController } from 'ionic-angular';
+import { ViewController,PopoverController, NavController, LoadingController } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
-
-//import { Product } from '../../components/product/product';
 
 //pages
 import { ProductDetails } from '../product-details/product-details';
 import { Cart } from '../../popovers/cart';
-import { Offers } from '../offers/offers';
-import { CheckoutPage } from '../checkout/checkout';
+import { Login } from '../login/login';
+
 
 //providers
 import {Data} from "../../providers/data";
 import {Helpers} from "../../providers/helpers";
 import {NoInternet} from "../no-internet/no-internet";
-
-//import { File } from '@ionic-native/file';
+import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
+import {CartProvider} from "../../providers/cart-provider";
 
 declare var cordova: any;
 
@@ -28,39 +26,44 @@ export class HomePage {
   searchTerm:string = '';
   filtredProducts = [];
   products = [];
-  //bestProduct;
+  login: boolean;
+  currentUserName: string;
+  hideLogout: boolean = false;
   constructor(
     public popoverCtrl: PopoverController,
+    public viewCtrl: ViewController,
     public navCtrl: NavController,
     public data: Data,
     public helpers: Helpers,
     public network: Network,
-    //public file: File,
+    public authServcie: AuthServiceProvider,
+    public cartProvider: CartProvider,
     public loadingCtrl: LoadingController
-  ) {
-     let loading = this.loadingCtrl.create({
+    ) {
+      this.login = this.authServcie.auth.isAuthenticated();
+      this.currentUserName = this.authServcie.user.details.name;
+      let loading = this.loadingCtrl.create({
       content: 'Please wait...'
-    });
-    loading.present();
-    this.data.getProducts()
-    .then(prods => {
+      });
+      loading.present();
+      this.data.getProducts()
+      .then(prods => {
       this.products = prods;
-    });
-    /** this.data.getBestProduct()
-      .then(prod => {
-        this.bestProduct = prod
-        console.log(prod[0]);
-       
-        loading.dismiss();
-      }) */ 
+      });
       loading.dismiss();
   }
 
   ionViewDidLoad(){
     this.network.onDisconnect().subscribe(() => {
-      //console.log('network was disconnected :-(');
-      this.navCtrl.push(NoInternet);
+    this.navCtrl.push(NoInternet);
     });
+  }
+
+  ionViewWillEnter() {
+    if(this.authServcie.checkHome) {
+      this.authServcie.checkHome = false;
+      this.navCtrl.setRoot(HomePage);
+    }
   }
 
   cartPopover(cartEvent){
@@ -68,6 +71,11 @@ export class HomePage {
     popover.present({
       ev: cartEvent
     });
+    /**if(!this.cartProvider.prodsInCart.length) {
+        setTimeout(function () {
+        popover.dismiss();
+      }, 1500);
+    }*/
   }
 
   goToProductDetails(product){
@@ -78,18 +86,14 @@ export class HomePage {
     );
   }
 
-  showAllCategories(){
-    this.navCtrl.push(Offers);
-  }
-
   setFiltredProducts() {
       this.filtredProducts = this.searchTerm ? this.helpers.filterProducts(this.searchTerm, this.products) : [];
       this.nothing = this.helpers.filterProducts(this.searchTerm, this.products).length ? false : true;
-      console.log(this.filtredProducts);
+      //console.log(this.filtredProducts);
   }
 
   clearFiltredProducts(){
-    console.log('cleared');
+    // console.log('cleared');
     this.filtredProducts = [];
   }
 
@@ -102,8 +106,31 @@ export class HomePage {
   }
 */
 
-  goToCheckout(){
-    this.navCtrl.push(CheckoutPage);
+   openHomePage() {
+    this.navCtrl.setRoot(HomePage);
+   }
+
+   openOrders() {
+
+   }
+
+  openLoginPage() {
+    this.navCtrl.setRoot(Login);
+  }
+
+  openAboutPage() {
+    
+  }
+
+  logout() {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...',
+      dismissOnPageChange: true
+    });
+    loading.present();
+    this.authServcie.auth.logout();
+    this.authServcie.checkSignUp = true;
+    this.navCtrl.setRoot(HomePage);
   }
 
 }

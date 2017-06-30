@@ -1,9 +1,11 @@
-import { ToastController } from 'ionic-angular';
+import { ToastController, LoadingController } from 'ionic-angular';
 import {Injectable} from '@angular/core';
 
 @Injectable()
 export class Toast {
-  constructor(public toastCtrl: ToastController) {
+  loading;
+  constructor(public toastCtrl: ToastController,
+              public loadingCtrl: LoadingController) {
   }
 
   productAdded() {
@@ -23,4 +25,36 @@ export class Toast {
     });
     toast.present();
   }
+
+  orderConfirmed() {
+    let toast = this.toastCtrl.create({
+      message: 'Order Confirmed',
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
+
+  errorMessage(err: string) {
+    let toast = this.toastCtrl.create({
+      message: err,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
+
+  presentLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...',
+      dismissOnPageChange: true
+    });
+    this.loading.present();
+  }
+
+  dismissLoading() {
+    this.loading.dismiss();
+  }
+
+
 }

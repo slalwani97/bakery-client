@@ -89,3 +89,18 @@ input[type=number]
   bottom: -1px;
   height: 50%;
 }
+
+.card-md p {
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.arrowButtons {
+        background-color: transparent;
+        color: #a6a6ad;
+        padding: 0;
+        margin: 0px;
+        height: auto;
+        font-weight: bold;
+        font-size: 30px;
+      }

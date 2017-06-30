@@ -4,23 +4,31 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+
 
 import { Product } from '../components/product/product';
 
 //pages
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { CheckoutPage } from '../pages/checkout/checkout';
 import {NoInternet} from "../pages/no-internet/no-internet";
 import { Cart } from '../popovers/cart';
 import { ProductDetails } from '../pages/product-details/product-details';
-import { Offers } from '../pages/offers/offers';
+import { SignUp } from '../pages/sign-up/sign-up';
+import { Login } from '../pages/login/login';
+import { AddressPage } from '../pages/address/address';
+import { ChangeAddressPage } from '../pages/change-address/change-address';
+
+
 
 //Providers
 import { Data } from '../providers/data';
 import { Helpers } from '../providers/helpers';
 import { CartProvider } from '../providers/cart-provider';
 import { Toast } from '../providers/toast';
+import { AuthServiceProvider } from '../providers/auth-service/auth-service';
+
 
 //Cordova plugins
 import { Network } from '@ionic-native/network';
@@ -37,31 +45,42 @@ export function provideStorage() {
   });// optional config);
 }
 
+const cloudSettings: CloudSettings = {
+  'core': {
+    'app_id': 'APP_ID'
+  }
+}; 
+
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    CheckoutPage,
     NoInternet,
     Cart,
+    SignUp,
+    Login,
     ProductDetails,
-    Offers,
+    AddressPage,
+    ChangeAddressPage,
     Product
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    CloudModule.forRoot(cloudSettings),
     HttpModule    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    CheckoutPage,
     NoInternet,
+    SignUp,
+    Login,
+    AddressPage,
+    ChangeAddressPage,
     Cart,
     ProductDetails,
-    Offers
   ],
   providers: [
     StatusBar,
@@ -73,9 +92,10 @@ export function provideStorage() {
     Transfer,
     CartProvider,
     Toast,
+    AuthServiceProvider,
     SQLite,
     { provide: Storage, useFactory: provideStorage },
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ]
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ]
 })
 export class AppModule {}

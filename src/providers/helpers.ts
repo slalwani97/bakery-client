@@ -15,7 +15,7 @@ export class Helpers {
 
   filterProducts(searchTerm, prods){
     return prods.filter((product) => {
-        return product.productName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+        return product.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
   }
 

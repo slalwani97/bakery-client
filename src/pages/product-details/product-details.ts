@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, PopoverController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, PopoverController, NavParams } from 'ionic-angular';
 
 //pages
-import { CheckoutPage } from '../checkout/checkout';
 import { Cart } from '../../popovers/cart';
-//import { Category } from '../category/category';
 
 //providers
 import { CartProvider } from '../../providers/cart-provider';
@@ -12,12 +10,6 @@ import {Data} from "../../providers/data";
 import {Toast} from "../../providers/toast";
 
 
-/**
- * Generated class for the ProductDetails page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 @IonicPage()
 @Component({
   selector: 'page-product-details',
@@ -25,16 +17,27 @@ import {Toast} from "../../providers/toast";
 })
 export class ProductDetails {
   product;
-  //characteristics = [];
   qty:number = 1;
+  currentProductPrice: number;
  
   upQty(){
+    if(this.product.quantity > this.qty) {
     this.qty += 1;
+    this.currentProductPrice += this.product.price;
   }
+    else {
+    let err = 'Only ' + this.product.quantity + ' left in Stock';
+    this.toast.errorMessage(err);
+    }
+  }
+  
   downQty(){
-    if(this.qty > 1)
+    if(this.qty > 1) {
+      this.currentProductPrice -= this.product.price;
       this.qty -= 1;
+    }
   }
+
   constructor(
       public navCtrl: NavController,
       public navParams: NavParams,
@@ -42,30 +45,15 @@ export class ProductDetails {
       public cartProvider: CartProvider,
       public data: Data,
       public toast: Toast
-   //   public toastCtrl: ToastController
   ) {
     this.product = this.navParams.get('product');
-   // this.characteristics = this.product.characteristics.split(';');
-   // this.characteristics.pop();
-   // console.log(this.characteristics);
+    this.currentProductPrice = (this.product.price)*(this.qty);
   }
-  /*toast = this.toastCtrl.create({
-      message: 'Product was added successfully',
-      duration: 2000,
-      position: 'middle',
-      closeButtonText: 'Close'
-    }
-  );*/
 
   addToCart(id, qty){
+    this.navCtrl.pop();
     this.cartProvider.addItem(id, qty);
-    //this.toast.present();
-    console.log(id + " " + qty);
-    console.log(this.cartProvider.prodsInCart);
-  }
-
-  goToCheckout(){
-    this.navCtrl.push(CheckoutPage);
+    //console.log(this.cartProvider.prodsInCart);
   }
 
   cartPopover(cartEvent){
@@ -73,19 +61,15 @@ export class ProductDetails {
     popover.present({
       ev: cartEvent
     });
+    if(!this.cartProvider.prodsInCart.length) {
+      setTimeout(function () {
+        popover.dismiss();
+      }, 1500);
+    }
   }
-
-  showAllCategories(){
-/**    this.navCtrl.push(Category, {
-      target: 'All Categories'
-    });
-  */
-}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProductDetails');
   }
-
-  
 
 }

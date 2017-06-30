@@ -1,16 +1,13 @@
-<div class="cartPopOver">
-    <ion-toolbar>
-        <button class="white" ion-button menuToggle (click)="close($event)">
-            <ion-icon name="menu"></ion-icon>
-        </button>
+    <ion-toolbar color="danger">
         <ion-title>Your Cart</ion-title>
         <ion-buttons end class="arrowButtons">
-            <button ion-button (click)="close($event)">
+            <button ion-button (click)="close()">
               <ion-icon class="white button-large" ios="ios-close" md="md-close"></ion-icon>
             </button>
         </ion-buttons>
     </ion-toolbar>
 
+  <div class="cartPopOver">
     <div class="mainPopoverDiv">
         <div no-padding  *ngIf="products.length">
             <ion-card *ngFor="let p of products; let i = index">
@@ -18,15 +15,15 @@
                     <ion-row>
                         <ion-col col-3 class="avatarColumn">
                             <ion-thumbnail item-left>
-                                <img src="http://localhost:8080/images/chocolate.jpg" class="avatarColumnImg">
+                                <img src="http://localhost:8090/images/chocolate.jpg" class="avatarColumnImg">
                              
                             </ion-thumbnail>
                         </ion-col>
                         <ion-col col-6>
                             <div class="itemDetails">
-                                <h2 class="itemDetailsHeading">{{ p.productName }}</h2>
+                                <h2 class="itemDetailsHeading">{{ p.name }}</h2>
 
-                                <div class="itemPrice">Rs {{ p.productRate }} </div>
+                                <div class="itemPrice">Rs {{ p.price }} </div>
                             </div>
                         </ion-col>
                         <ion-col col-3 class="centerText">
@@ -37,7 +34,7 @@
                                             <ion-icon ios="ios-arrow-dropup" md="md-arrow-dropup"></ion-icon>
                                         </button>
                                     </div>
-                                    <div>{{ p.quantity }}</div>
+                                   <div>{{ this.idsQtis[i].quantityRequired }}</div>
                                     <script>console.log(q.qty)</script>
                                     <div>
                                         <button class="button arrowButtons" type="button" (click)="decreaseItem(i)">
@@ -58,12 +55,12 @@
                 </ion-card-content>
             </ion-card>
         </div>
-        <!--*ngIf="products.length"--><div class="totalAmount" *ngIf="products.length">
+        <div class="totalAmount" *ngIf="products.length">
             <h1 class="totalAmountHeading">Rs {{ total }}</h1>
             <button (click)="goToCheckout()" ion-button color="someGray" text-uppercase>Proceed to Checkout</button>
         </div>
 
-        <!--*ngIf="!products.length"--><div *ngIf="!products.length">
+       <div *ngIf="!products.length">
             <h3 class="white" align="center">Your cart is empty</h3>
         </div>
 
