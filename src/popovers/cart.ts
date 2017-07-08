@@ -14,8 +14,10 @@ import {Toast} from "../providers/toast";
 })
 export class Cart {
     products= [];
+    product;
     idsQtis;
     total:number= 0;
+    
     constructor(
         public viewCtrl: ViewController,
         public navCtrl: NavController,
@@ -28,6 +30,11 @@ export class Cart {
                   this.idsQtis = this.cartProvider.prodsInCart;
                   if(this.idsQtis.length){
                     for(let i=0; i<this.idsQtis.length; i++){
+                        this.product = this.data.getProductById(this.idsQtis[i].productId);
+                        if(this.product.quantity < this.idsQtis[i].quantityRequired) {
+                            this.idsQtis[i].quantityRequired = this.product.quantity;
+                            this.cartProvider.prodsInCart[i].quantityRequired = this.product.quantity;
+                        }
                     this.products.push(this.data.getProductById(this.idsQtis[i].productId));
                     this.total += (this.products[i].price - 0) * (this.idsQtis[i].quantityRequired - 0);
                     }
@@ -62,7 +69,7 @@ export class Cart {
              let popover = this.viewCtrl;
              setTimeout(function () {
                popover.dismiss();
-             }, 300); 
+             }, 700); 
           } 
      }
 

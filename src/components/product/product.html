@@ -1,12 +1,16 @@
 <ion-grid>
-    <ion-row id="banner">
-      <ion-col col-6>
+    <ion-row id="banner" (click)="goToProductDetails(product)">
+      <ion-col col-5>
        <img id="img-banner" src="http://localhost:8090/images/chocolate.jpg" />
-       </ion-col>
+       <p *ngIf="product.quantity == 0" class="outOfStock">Out Of Stock</p>
+    </ion-col>
       <ion-col col-6>
        <h4 text-uppercase>{{ product.name }}</h4>
         <p class="desc">{{ product.type }}</p>
-        <button small ion-button color="danger" (click)="goToProductDetails(product)">Book now</button>
+        <p class="price">Rs {{ product.price }}</p>
       </ion-col>
+      <ion-col col-1>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
+    </ion-col>
     </ion-row>
   </ion-grid>

@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar color="danger">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Orders</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <ion-list *ngIf="this.orders">
+    <ion-item *ngFor="let o of orders" (click)="goToDetails(o)">
+      <ion-avatar item-start>
+        <img src="http://localhost:8090/images/bakery.jpg">
+      </ion-avatar>
+      <h2>Jai Bakery</h2>
+      <p> {{o.date |  date:'dd/MM/yyyy'}} </p>
+      <p> {{o.date | date:'shortTime'}} </p>
+      <ion-icon name="ios-arrow-forward-outline" small item-end></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <p *ngIf="!this.loggedIn" padding> Please login to see your orders. </p>
+   <p *ngIf="(this.orders==null || !this.orders.length) && this.loggedIn" padding> Sorry, you have not placed any order yet. </p>
+</ion-content>

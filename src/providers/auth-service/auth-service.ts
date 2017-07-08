@@ -6,10 +6,10 @@ import { Auth, User } from '@ionic/cloud-angular';
 
 @Injectable()
 export class AuthServiceProvider {
-  checkSignUp: boolean = true;
-  checkAddress: boolean = false;
-  checkHome: boolean = false;
-  refresh: boolean = true;
+  currentUserName: string;
+  currentUserUsername: string;
+  check: boolean = false;
+
   constructor(public http: Http,
               public auth: Auth,
               public user: User,
@@ -17,7 +17,8 @@ export class AuthServiceProvider {
     if(this.auth.isAuthenticated()) {
       this.user.load();
     }
-   this.checkSignUp = true;
+    this.currentUserName = this.user.details.name;
+    this.currentUserUsername = this.user.details.username;
   }
 
   setDetails(data) {

@@ -5,7 +5,6 @@ import { Network } from '@ionic-native/network';
 //pages
 import { ProductDetails } from '../product-details/product-details';
 import { Cart } from '../../popovers/cart';
-import { Login } from '../login/login';
 
 
 //providers
@@ -26,9 +25,7 @@ export class HomePage {
   searchTerm:string = '';
   filtredProducts = [];
   products = [];
-  login: boolean;
-  currentUserName: string;
-  hideLogout: boolean = false;
+  
   constructor(
     public popoverCtrl: PopoverController,
     public viewCtrl: ViewController,
@@ -40,8 +37,6 @@ export class HomePage {
     public cartProvider: CartProvider,
     public loadingCtrl: LoadingController
     ) {
-      this.login = this.authServcie.auth.isAuthenticated();
-      this.currentUserName = this.authServcie.user.details.name;
       let loading = this.loadingCtrl.create({
       content: 'Please wait...'
       });
@@ -49,21 +44,20 @@ export class HomePage {
       this.data.getProducts()
       .then(prods => {
       this.products = prods;
+    });
+    if(this.authServcie.auth.isAuthenticated()) {
+      this.data.getOrders(this.authServcie.user.id)
+      .then(orders => {
+        //console.log(orders);
       });
+    }
       loading.dismiss();
   }
 
   ionViewDidLoad(){
     this.network.onDisconnect().subscribe(() => {
     this.navCtrl.push(NoInternet);
-    });
-  }
-
-  ionViewWillEnter() {
-    if(this.authServcie.checkHome) {
-      this.authServcie.checkHome = false;
-      this.navCtrl.setRoot(HomePage);
-    }
+  });
   }
 
   cartPopover(cartEvent){
@@ -71,19 +65,20 @@ export class HomePage {
     popover.present({
       ev: cartEvent
     });
-    /**if(!this.cartProvider.prodsInCart.length) {
+    if(!this.cartProvider.prodsInCart.length) {
         setTimeout(function () {
         popover.dismiss();
       }, 1500);
-    }*/
+    }
   }
 
   goToProductDetails(product){
-    this.navCtrl.push(
+    if(!(product.quantity == 0)) {
+      this.navCtrl.push(
       ProductDetails,{
         product : product
-      }
-    );
+      });
+    }
   }
 
   setFiltredProducts() {
@@ -105,32 +100,5 @@ export class HomePage {
     }
   }
 */
-
-   openHomePage() {
-    this.navCtrl.setRoot(HomePage);
-   }
-
-   openOrders() {
-
-   }
-
-  openLoginPage() {
-    this.navCtrl.setRoot(Login);
-  }
-
-  openAboutPage() {
-    
-  }
-
-  logout() {
-    let loading = this.loadingCtrl.create({
-      content: 'Please wait...',
-      dismissOnPageChange: true
-    });
-    loading.present();
-    this.authServcie.auth.logout();
-    this.authServcie.checkSignUp = true;
-    this.navCtrl.setRoot(HomePage);
-  }
 
 }
