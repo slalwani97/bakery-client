@@ -19,6 +19,10 @@ import { SignUp } from '../pages/sign-up/sign-up';
 import { Login } from '../pages/login/login';
 import { AddressPage } from '../pages/address/address';
 import { ChangeAddressPage } from '../pages/change-address/change-address';
+import { OrdersPage } from '../pages/orders/orders';
+import { About } from '../pages/about/about';
+import { OrderDetailsPage } from '../pages/order-details/order-details';
+
 
 
 
@@ -62,7 +66,10 @@ const cloudSettings: CloudSettings = {
     ProductDetails,
     AddressPage,
     ChangeAddressPage,
-    Product
+    OrdersPage,
+    Product,
+    About,
+    OrderDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -79,8 +86,11 @@ const cloudSettings: CloudSettings = {
     Login,
     AddressPage,
     ChangeAddressPage,
+    OrdersPage,
     Cart,
     ProductDetails,
+    About,
+    OrderDetailsPage
   ],
   providers: [
     StatusBar,

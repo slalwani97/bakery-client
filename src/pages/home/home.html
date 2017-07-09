@@ -1,28 +1,4 @@
-<ion-menu [content]="mycontent">
-
-    <ion-content>
-        <ion-list>
-             <button ion-item menuClose (click)="openHomePage()">
-                Home
-            </button>
-            <button ion-item menuClose (click)="openOrders()">
-                My Orders
-            </button>
-            <button ion-item menuClose (click)="openLoginPage()">
-                Login/SignUp
-            </button>
-            <button ion-item menuClose (click)="openAboutPage()">
-                About
-            </button>
-            <button *ngIf="this.hideLogout" ion-item menuClose (click)="click()">
-                Logout
-            </button>
-        </ion-list>
-    </ion-content>
-
-</ion-menu>
-
-<ion-nav #mycontent [root]="rootPage"></ion-nav><ion-header>
+<ion-header>
   <ion-navbar color="danger">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
@@ -34,12 +10,6 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-toolbar color="dark"  *ngIf = "this.login">
-    <ion-title>Hello, {{this.currentUserName}} </ion-title> 
-    <ion-buttons end>
-      <button small ion-button color="danger" (click)="logout()"> Logout </button>
-    </ion-buttons> 
-  </ion-toolbar>
   <ion-toolbar>
   <ion-searchbar
     placeholder="Search for products"
@@ -64,6 +34,7 @@
     <ion-row id="banner" *ngFor="let p of products" (click)="goToProductDetails(p)">
       <ion-col col-5>
        <img id="img-banner" src="http://localhost:8090/images/chocolate.jpg" />
+       <p *ngIf="p.quantity == 0" class="outOfStock">Out Of Stock</p>
     </ion-col>
       <ion-col col-6>
        <h4 text-uppercase>{{ p.name }}</h4>

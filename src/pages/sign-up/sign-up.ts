@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Events } from 'ionic-angular';
 import {Validators, FormBuilder } from '@angular/forms';
 import { UserDetails, IDetailedError } from '@ionic/cloud-angular';
 
 import { Data } from '../../providers/data';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
-import {Toast} from "../../providers/toast";
+import { Toast } from "../../providers/toast";
 
 
 
@@ -26,6 +26,7 @@ export class SignUp {
     public loadingCtrl: LoadingController,
     public authService: AuthServiceProvider,
     public toast: Toast,
+    public events: Events
     ) {
       this.signUp = this.formBuilder.group({
         fullName: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(50), Validators.required])],
@@ -53,13 +54,15 @@ export class SignUp {
                                 'password': this.signUp.value.password
                               };
     this.authService.auth.signup(details).then(() => {
-    //console.log('ok signup.. ');   
-    this.authService.checkSignUp = false; 
+    //console.log('ok signup.. ');    
     this.authService.auth.login('basic', {'email':details.email, 'password':details.password}).then(() => {
     //console.log('ok login.. ');    
     this.authService.setDetails(this.signUp.value);
-    this.authService.checkAddress = true;
-    this.authService.checkHome = true;
+    this.data.orders = [];
+    this.toast.errorMessage('SignUp Successful');
+    this.authService.currentUserName = this.authService.user.details.name;
+    this.authService.currentUserUsername = this.authService.user.details.username; 
+    this.events.publish('login:success', true );
     this.navCtrl.pop();
     this.navCtrl.pop();
     loading.dismiss();

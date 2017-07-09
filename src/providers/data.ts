@@ -10,7 +10,9 @@ import { File } from '@ionic-native/file';
 export class Data {
   api: string = 'http://localhost:8090/';
   products;
+  orders;
   loggedIn:boolean = false;
+  date: Date;
   
   constructor(
     public http: Http,
@@ -53,4 +55,23 @@ export class Data {
     return null;
   }
 
+  getOrders(userId) {
+    if (this.orders) {
+      return Promise.resolve(this.orders);
+    }
+    return new Promise(resolve => {
+      this.http.get(this.api + "orders/" + userId)
+        .map(res => res.json())
+        .subscribe(data => {
+          if(data == null) {
+            this.orders = [];
+          }
+          else {
+            this.orders = data;
+          }
+          resolve(this.orders);
+        });
+    });
+
+  }
 }

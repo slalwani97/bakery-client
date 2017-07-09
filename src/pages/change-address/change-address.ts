@@ -29,10 +29,6 @@ export class ChangeAddressPage {
     this.navCtrl.pop();
   }
 
-  ionViewWillLeave() {
-        this.authService.refresh = true;
-  }
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChangeAddressPage');
   }

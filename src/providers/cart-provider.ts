@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map';
+import {Observable} from 'rxjs/Rx';
 
 import { Response, Headers } from "@angular/http";
 
@@ -123,10 +124,12 @@ export class CartProvider {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let body = JSON.stringify(this.order);
-    this.http.post('http://localhost:8090/checkout', body, {headers: headers} )
-    .map((res: Response) => res.text()).subscribe(
-      (data) => console.log(this.data)
-    );
+    return this.http.post('http://localhost:8090/checkout', body, {headers: headers} )
+    .map((res: Response) =>  
+        res.json() 
+     ).catch((err: Response) => { 
+       return Observable.throw(err.json());
+     });
   }
 
 }
